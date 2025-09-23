@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST['submit'])) {
         // Tạo token ngẫu nhiên
         $token = bin2hex(random_bytes(32));
 
+        unset($user[0]['password']);
         // Lưu vào Redis với thời hạn 20 phút
-        $redis_key = 'user' . $user[0]['id'];
-        $redis->set("auth_token:$token", $user[0]['id']);
+        $redis->set("auth_token:$token", json_encode($user[0]));
         $redis->expire("auth_token:$token", 1200);
 
         echo json_encode([
